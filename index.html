@@ -6,12 +6,12 @@
   <title>はなちょうちんパッチン！</title>
   
   <!-- Tailwind CSS (デザイン用) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+
   <!-- React本体とBabel (ブラウザでReactを動かすため) -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
 </head>
 <body>
   <!-- アプリが表示される場所 -->
@@ -26,39 +26,25 @@
       const [popEffect, setPopEffect] = useState(null);
       const [totalScore, setTotalScore] = useState(0);
       const [wakeCount, setWakeCount] = useState(0);
-      const [bubbleScale, setBubbleScale] = useState(1);
-      const animationRef = useRef(null);
       const startTimeRef = useRef(Date.now());
 
       useEffect(() => {
-        if (!isSleeping) {
-          if (animationRef.current) cancelAnimationFrame(animationRef.current);
-          return;
+        if (isSleeping) {
+          startTimeRef.current = Date.now();
         }
-
-        startTimeRef.current = Date.now();
-        
-        const animate = () => {
-          const now = Date.now();
-          const elapsed = now - startTimeRef.current;
-          const cycleProgress = (elapsed % 3500) / 3500;
-          const sineValue = Math.sin(cycleProgress * Math.PI); 
-          const currentScale = 1 + (1.5 * sineValue);
-          
-          setBubbleScale(currentScale);
-          animationRef.current = requestAnimationFrame(animate);
-        };
-
-        animationRef.current = requestAnimationFrame(animate);
-
-        return () => {
-          if (animationRef.current) cancelAnimationFrame(animationRef.current);
-        };
       }, [isSleeping]);
+
+      // CSSの breathe キーフレーム (3.5s / linear / scale 1→2.5→1) と同じ進行で
+      // 現在の表示スケールを算出する
+      const getCurrentScale = () => {
+        const cycleProgress = ((Date.now() - startTimeRef.current) % 3500) / 3500;
+        return 1 + 3 * Math.min(cycleProgress, 1 - cycleProgress);
+      };
 
       const handlePop = () => {
         if (!isSleeping) return;
 
+        const bubbleScale = getCurrentScale();
         let score = 10;
         let effectType = 'normal';
         let message = "Good!";
@@ -170,7 +156,19 @@
                 </g>
 
                 {isSleeping && (
-                  <g className="snot-bubble-group" onClick={handlePop}>
+                  <g
+                    className="snot-bubble-group"
+                    onClick={handlePop}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handlePop();
+                      }
+                    }}
+                    role="button"
+                    tabIndex="0"
+                    aria-label="はなちょうちんを割ってクマを起こす"
+                  >
                     <circle cx="110" cy="135" r="14" fill="rgba(173, 216, 230, 0.6)" stroke="rgba(135, 206, 235, 0.8)" strokeWidth="2" className="snot-bubble-base" />
                     <path d="M 103 128 Q 110 123 117 128" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="2" fill="none" strokeLinecap="round" style={{ pointerEvents: 'none' }} />
                   </g>
