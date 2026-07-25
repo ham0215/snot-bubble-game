@@ -45,3 +45,7 @@ open index.html  # またはブラウザで index.html を開く
 
 - **Source**: Deploy from a branch
 - **Branch**: `main` / `/ (root)`
+
+## 📄 ライセンス
+
+[MIT License](LICENSE)
