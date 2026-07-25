@@ -2,6 +2,8 @@
 
 眠っているクマの「はなちょうちん（鼻ちょうちん）」を、大きく膨らんだ瞬間を狙ってタップして割るタイミングゲームです。
 
+<img width="458" height="632" alt="Screenshot 2026-07-26 at 8 29 36" src="https://github.com/user-attachments/assets/fa3b5889-2947-4cef-a76b-d2caf74f3a95" />
+
 ## 🎮 遊ぶ
 
 GitHub Pages で公開しています。
@@ -21,6 +23,8 @@ GitHub Pages で公開しています。
 | 大きく膨らんだ瞬間 | PERFECT!! | **100点** |
 
 クマはしばらくするとまた眠るので、繰り返し起こしてハイスコアを目指しましょう。
+
+https://github.com/user-attachments/assets/df64ac16-242c-4caa-a61a-2bc5b37c2d0c
 
 ## 🛠 技術構成
 
